@@ -4,12 +4,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const uri = "mongodb+srv://pfl_demo_user:Test123Test@cluster0.7264iy3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGODB_URI
+const secret= process.env.SECRET_KEY;
 
 
 const app = express();
 const PORT = process.env.PORT || 5050;
-const SECRET_KEY = 'rabbits-are-cute';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -49,7 +49,7 @@ app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
   if (user && bcrypt.compareSync(password, user.password)) {
-    const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, SECRET_KEY);
+    const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, secret);
     res.send({ user: { username: user.username, isAdmin: user.isAdmin }, token });
   } else {
     res.status(401).send('Invalid credentials');
