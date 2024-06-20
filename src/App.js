@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
+import TaskList from './components/TaskList';
+import Admin from './components/Admin';
+import Navbar from './components/Navbar';
+//import './styles/tailwind.css';
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      {user && <Navbar user={user} />}
+      <Routes>
+        <Route path="/login" element={<Login   />}/>
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/" element={<Login   />}/>
+        <Route pasth="/tasks" element={<TaskList user={user} />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
